@@ -61,6 +61,8 @@ const userProductsController = require('./controllers/userProfile/userProducts')
 const userFeedbacksController = require('./controllers/userProfile/userFeedbacks');
 const userContactsController = require('./controllers/userProfile/userContacts');
 
+const sendingMessageController = require('./controllers/contact/contact');
+
 const addToCartController = require('./controllers/cart/addToCart');
 const gettingCartProductsController = require('./controllers/cart/gettingCartProducts');
 const deletingCartProductsController = require('./controllers/cart/deletingCartProducts');
@@ -96,6 +98,8 @@ const uploadingController = require('./controllers/upload/upload');
  app.get('/user/Products/:userid', (req, res)=>{userProductsController.userProducts(req, res, client)})
  app.get('/user/Feedbacks/:userid',(req, res)=>{userFeedbacksController.userFeedbacks(req, res, client)})
  app.get('/user/Contact/:userid',(req, res)=>{userContactsController.userContacts(req, res, client)})
+
+ app.post('/user/conversation', (req,res)=>{sendingMessageController.contact(req,res,client, ObjectID)})
 
  app.post('/cart', (req, res)=>{addToCartController.addToCart(req, res, client)})
  app.get('/cart/:userid', (req, res)=>{gettingCartProductsController.gettingCartProducts(req, res, client)})

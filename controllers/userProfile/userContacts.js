@@ -9,7 +9,6 @@ const userContacts = async (req, res, client)=>{
             await result.forEach((product)=>{
                     userContacts.push(product);
                   });
-            console.log(userContacts);
             res.json(userContacts);
           }
 
