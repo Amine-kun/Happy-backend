@@ -5,20 +5,32 @@ const contact = async (req, res, client, ObjectID)=>{
       const contactId = new ObjectID(req.body.convoId);
       const msg = req.body.message;
 
-      client.db().collection("contacts").updateOne(
+      if (msg === null) {
+        res.status(404).json('field must not be empty')
+      } else {
+
+        client.db().collection("contacts").updateOne(
                     {_id:contactId},
                         {$push: { 
                               messages: {'time':'20:00pm',
                                          'message':msg,
-                                         'from':'me'} 
+                                         'from':'sender'} 
                              } 
                         })
-      .then((convo)=> 
-        // res.json(contact)
-        console.log(convo)
-            )
-      .catch(err=>res.status(400).json('cant find user'));
+      .then(async ()=>{ 
+            const updatedConvo= [];
+
+            const result = client.db().collection("contacts").find({_id:contactId})
+                await result.forEach((convo)=>{
+                        updatedConvo.push(convo);
+                      });
+
+                res.json(updatedConvo);
+           })
+      .catch(err=>res.status(400).json('cant send this message'));
         }
+
+      }
 
 module.exports = {
 	contact: contact
