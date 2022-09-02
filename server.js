@@ -5,10 +5,16 @@ const {uuid} = require("uuidv4");
 const cors= require('cors');
 const multer = require('multer');
 const app = express();
+
 const {MongoClient, ObjectID} = require('mongodb');
 const Stripe = require('stripe');
 const stripe = Stripe('sk_test_51L0XZlIfzIYbrSO06EQjcvSUBdXeAqudA7KxQM1rHH9mdaKHK9FIvhaljoWWsBpkcybGxiFvuImrbtLgoMrVRkW4007PWCa2Rv');
 
+
+const http = require('http');
+const port = 4000;
+const server = http.createServer(app);
+const io = require('socket.io')(server);
 
 
 const { initializeApp, cert } = require('firebase-admin/app');
@@ -21,7 +27,6 @@ const serviceAccount = require('./serviceAccountKey.json');
 
 
 //mongodb settings
-// const uri = "mongodb+srv://ecomApp:kokaKOKA@cluster0.ay8dz.mongodb.net/EcomDB?retryWrites=true&w=majority";
 const uri = "mongodb+srv://ecomApp:kokaKOKA@cluster0.ay8dz.mongodb.net/EcomDB?retryWrites=true&w=majority";
 const client = new MongoClient(uri);
 
@@ -44,7 +49,16 @@ const storage = multer.diskStorage({
     });
 const upload = multer({storage:storage});
 
+//establishing socket.io connection
 
+server.listen(port, ()=>{
+  console.log(`listening on: ${port}`)
+})
+
+io.on('connection', (socket) =>{
+  console.log('new client connected');
+  socket.emit('connection', 'hi')
+})
 
 // controllers
 const loginController = require('./controllers/login&&register/login');
@@ -99,7 +113,7 @@ const uploadingController = require('./controllers/upload/upload');
  app.get('/user/Feedbacks/:userid',(req, res)=>{userFeedbacksController.userFeedbacks(req, res, client)})
  app.get('/user/Contact/:userid',(req, res)=>{userContactsController.userContacts(req, res, client)})
 
- app.post('/user/conversation', (req,res)=>{sendingMessageController.contact(req,res,client, ObjectID)})
+ app.post('/user/conversation', (req,res)=>{sendingMessageController.contact(req,res,client, ObjectID, io)})
 
  app.post('/cart', (req, res)=>{addToCartController.addToCart(req, res, client)})
  app.get('/cart/:userid', (req, res)=>{gettingCartProductsController.gettingCartProducts(req, res, client)})
@@ -116,4 +130,4 @@ const uploadingController = require('./controllers/upload/upload');
 
 
  app.use(express.static('upload'));
- app.listen(3001, ()=> console.log("listening.."))
+ app.listen(3001, ()=> console.log("listening.."));
