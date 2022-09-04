@@ -10,12 +10,15 @@ const {MongoClient, ObjectID} = require('mongodb');
 const Stripe = require('stripe');
 const stripe = Stripe('sk_test_51L0XZlIfzIYbrSO06EQjcvSUBdXeAqudA7KxQM1rHH9mdaKHK9FIvhaljoWWsBpkcybGxiFvuImrbtLgoMrVRkW4007PWCa2Rv');
 
-
 const http = require('http');
-const port = 4000;
+const { Server } = require("socket.io");
 const server = http.createServer(app);
-const io = require('socket.io')(server);
-
+const io = new Server(server, {
+  cors:{
+    origin: "http://localhost:3000",
+    methods:["GET", "POST"],
+  }
+});
 
 const { initializeApp, cert } = require('firebase-admin/app');
 const { getStorage, ref} = require('firebase-admin/storage');
@@ -51,13 +54,11 @@ const upload = multer({storage:storage});
 
 //establishing socket.io connection
 
-server.listen(port, ()=>{
-  console.log(`listening on: ${port}`)
-})
 
 io.on('connection', (socket) =>{
-  console.log('new client connected');
-  socket.emit('connection', 'hi')
+  socket.on("send_message", (data)=>{
+    socket.broadcast.emit("receive_message", data);
+  })
 })
 
 // controllers
@@ -113,7 +114,7 @@ const uploadingController = require('./controllers/upload/upload');
  app.get('/user/Feedbacks/:userid',(req, res)=>{userFeedbacksController.userFeedbacks(req, res, client)})
  app.get('/user/Contact/:userid',(req, res)=>{userContactsController.userContacts(req, res, client)})
 
- app.post('/user/conversation', (req,res)=>{sendingMessageController.contact(req,res,client, ObjectID, io)})
+ app.post('/user/conversation/:convoid', (req,res)=>{sendingMessageController.contact(req,res,client, ObjectID, io)})
 
  app.post('/cart', (req, res)=>{addToCartController.addToCart(req, res, client)})
  app.get('/cart/:userid', (req, res)=>{gettingCartProductsController.gettingCartProducts(req, res, client)})
@@ -130,4 +131,4 @@ const uploadingController = require('./controllers/upload/upload');
 
 
  app.use(express.static('upload'));
- app.listen(3001, ()=> console.log("listening.."));
+ server.listen(3001, ()=> console.log("listening..."));

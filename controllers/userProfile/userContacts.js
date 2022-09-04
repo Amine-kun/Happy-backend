@@ -5,7 +5,7 @@ const userContacts = async (req, res, client)=>{
         const userID =req.params.userid;
         const userContacts= [];
 
-        const result = client.db().collection("contacts").find({'to.userId': userID})
+        const result = client.db().collection("contacts").find({$or: [{'to.userId': userID}, {'from.userId': userID}]})
             await result.forEach((product)=>{
                     userContacts.push(product);
                   });
