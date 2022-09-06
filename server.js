@@ -76,7 +76,9 @@ const userProductsController = require('./controllers/userProfile/userProducts')
 const userFeedbacksController = require('./controllers/userProfile/userFeedbacks');
 const userContactsController = require('./controllers/userProfile/userContacts');
 
-const sendingMessageController = require('./controllers/contact/contact');
+const gettingConvoMessagesController = require('./controllers/contact/contact');
+const sendingMessageController = require('./controllers/contact/updateContact');
+const creatingAContactController = require('./controllers/contact/addContact');
 
 const addToCartController = require('./controllers/cart/addToCart');
 const gettingCartProductsController = require('./controllers/cart/gettingCartProducts');
@@ -114,7 +116,9 @@ const uploadingController = require('./controllers/upload/upload');
  app.get('/user/Feedbacks/:userid',(req, res)=>{userFeedbacksController.userFeedbacks(req, res, client)})
  app.get('/user/Contact/:userid',(req, res)=>{userContactsController.userContacts(req, res, client)})
 
- app.post('/user/conversation/:convoid', (req,res)=>{sendingMessageController.contact(req,res,client, ObjectID, io)})
+ app.get('/user/conversation/:convoid', (req,res)=>{gettingConvoMessagesController.contact(req,res,client, ObjectID)})
+ app.post('/user/conversation', (req,res)=>{sendingMessageController.sendingMessage(req,res,client, ObjectID)})
+ app.post('/user/Contact', (req, res)=>{creatingAContactController.addContact(req,res,client)})
 
  app.post('/cart', (req, res)=>{addToCartController.addToCart(req, res, client)})
  app.get('/cart/:userid', (req, res)=>{gettingCartProductsController.gettingCartProducts(req, res, client)})
