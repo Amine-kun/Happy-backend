@@ -56,8 +56,14 @@ const upload = multer({storage:storage});
 
 
 io.on('connection', (socket) =>{
+
+  socket.on("join_chat", (data)=>{
+    socket.join(data);
+    console.log(`user ${socket.id} has joined the chat ${data}`)
+  })
+
   socket.on("send_message", (data)=>{
-    socket.broadcast.emit("receive_message", data);
+    socket.to(data.channel).emit("receive_message", data);
   })
 })
 
