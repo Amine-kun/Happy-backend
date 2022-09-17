@@ -8,7 +8,7 @@ const app = express();
 
 const {MongoClient, ObjectID} = require('mongodb');
 const Stripe = require('stripe');
-const stripe = Stripe(STRIPE_API);
+const stripe = Stripe(process.env.STRIPE_API);
 
 const http = require('http');
 const { Server } = require("socket.io");
@@ -30,14 +30,14 @@ const serviceAccount = require('./serviceAccountKey.json');
 
 
 //mongodb settings
-const uri = MONGODB_URI;
+const uri = process.env.MONGODB_URI;
 const client = new MongoClient(uri);
 
 
 // Initialize Firebase
 initializeApp({
   credential: cert(serviceAccount),
-  storageBucket: FIREBASE_STORAGE_BUCKET
+  storageBucket: process.env.FIREBASE_STORAGE_BUCKET
 });
 const firebaseStorage = getStorage();
 const bucket = firebaseStorage.bucket();
