@@ -37,7 +37,7 @@ const addContact = async (req, res, client)=>{
                     }]
                   })
         })
-      .catch(err=>console.log("err at inserting cart product"))
+      .catch(err=>console.log("err at inserting new contact"))
   }
 
 module.exports = {

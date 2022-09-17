@@ -46,8 +46,8 @@ const uploading = async (req, res, client, uuid, bucket)=>{
                                                 userId:userId,
                                                 userImage:userImage},
                                         })
-                                            .then(()=>res.json("successfully user submited"))
-                                            .catch(err=>res.status(400).json('cant login'))
+                                            .then(()=>res.json("product has been successfully submited"))
+                                            .catch(err=>res.status(400).json('cant submit the product'))
 
                             })
                         }).catch(err => {

@@ -13,7 +13,7 @@ const addToWishlist = async (req, res, client)=>{
               By: userSavedBy
           }) 
         .then(()=>res.json("successfully added"))
-        .catch(err=>console.log("err at inserting cart product"))
+        .catch(err=>console.log("err at inserting wishlist product"))
   }
 
 module.exports = {

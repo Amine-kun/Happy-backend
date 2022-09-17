@@ -8,7 +8,7 @@ const app = express();
 
 const {MongoClient, ObjectID} = require('mongodb');
 const Stripe = require('stripe');
-const stripe = Stripe('sk_test_51L0XZlIfzIYbrSO06EQjcvSUBdXeAqudA7KxQM1rHH9mdaKHK9FIvhaljoWWsBpkcybGxiFvuImrbtLgoMrVRkW4007PWCa2Rv');
+const stripe = Stripe(STRIPE_API);
 
 const http = require('http');
 const { Server } = require("socket.io");
@@ -30,16 +30,18 @@ const serviceAccount = require('./serviceAccountKey.json');
 
 
 //mongodb settings
-const uri = "mongodb+srv://ecomApp:kokaKOKA@cluster0.ay8dz.mongodb.net/EcomDB?retryWrites=true&w=majority";
+const uri = MONGODB_URI;
 const client = new MongoClient(uri);
+
 
 // Initialize Firebase
 initializeApp({
   credential: cert(serviceAccount),
-  storageBucket: 'ecom-app-9ff67.appspot.com'
+  storageBucket: FIREBASE_STORAGE_BUCKET
 });
 const firebaseStorage = getStorage();
 const bucket = firebaseStorage.bucket();
+
 
 //multer settings
 const storage = multer.diskStorage({
@@ -52,20 +54,20 @@ const storage = multer.diskStorage({
     });
 const upload = multer({storage:storage});
 
-//establishing socket.io connection
 
+//establishing socket.io connection
 
 io.on('connection', (socket) =>{
 
   socket.on("join_chat", (data)=>{
     socket.join(data);
-    console.log(`user ${socket.id} has joined the chat ${data}`)
   })
 
   socket.on("send_message", (data)=>{
     socket.to(data.channel).emit("receive_message", data);
   })
 })
+
 
 // controllers
 const loginController = require('./controllers/login&&register/login');
@@ -108,6 +110,8 @@ const uploadingController = require('./controllers/upload/upload');
 
 
 
+
+//ENDPOINTS
  app.post('/login',(req, res)=>{loginController.logining(req, res, client)})
  app.post('/register', upload.single('file'), (req, res)=>{registerController.registering(req, res, client, uuid, bucket)})
 
