@@ -30,7 +30,7 @@ const serviceAccount = require('./serviceAccountKey.json');
 
 
 //mongodb settings
-const uri = 'mongodb+srv://ecomApp:kokaKOKA@cluster0.ay8dz.mongodb.net/?retryWrites=true&w=majority';
+const uri = 'mongodb+srv://ecomApp:kokaKOKA@cluster0.ay8dz.mongodb.net/EcomDB?retryWrites=true&w=majority';
 const client = new MongoClient(uri);
 
 
@@ -145,4 +145,4 @@ const uploadingController = require('./controllers/upload/upload');
 
 
  app.use(express.static('upload'));
- server.listen(3001, ()=> console.log("listening..."));
+ server.listen(process.env.PORT || 3001, ()=> console.log("listening..."));
