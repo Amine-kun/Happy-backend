@@ -17,6 +17,7 @@ const io = new Server(server, {
   cors:{
     origin: "https://web-happy.herokuapp.com/",
     methods:["GET", "POST"],
+    credentials: true,
   }
 });
 
