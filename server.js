@@ -8,7 +8,7 @@ const app = express();
 
 const {MongoClient, ObjectID} = require('mongodb');
 const Stripe = require('stripe');
-const stripe = Stripe(process.env.STRIPE_API);
+const stripe = Stripe('sk_test_51L0XZlIfzIYbrSO06EQjcvSUBdXeAqudA7KxQM1rHH9mdaKHK9FIvhaljoWWsBpkcybGxiFvuImrbtLgoMrVRkW4007PWCa2Rv');
 
 const http = require('http');
 const { Server } = require("socket.io");
@@ -30,14 +30,14 @@ const serviceAccount = require('./serviceAccountKey.json');
 
 
 //mongodb settings
-const uri = process.env.MONGODB_URI;
+const uri = 'mongodb+srv://ecomApp:kokaKOKA@cluster0.ay8dz.mongodb.net/EcomDB?retryWrites=true&w=majority';
 const client = new MongoClient(uri);
 
 
 // Initialize Firebase
 initializeApp({
   credential: cert(serviceAccount),
-  storageBucket: process.env.FIREBASE_STORAGE_BUCKET
+  storageBucket: 'ecom-app-9ff67.appspot.com'
 });
 const firebaseStorage = getStorage();
 const bucket = firebaseStorage.bucket();
