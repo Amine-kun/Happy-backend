@@ -145,4 +145,4 @@ const uploadingController = require('./controllers/upload/upload');
 
 
  app.use(express.static('upload'));
- server.listen(3001, ()=> console.log("listening..."));
+ server.listen(process.env.PORT || 3001, ()=> console.log("listening..."));
