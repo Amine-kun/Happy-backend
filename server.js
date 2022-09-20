@@ -15,9 +15,8 @@ const { Server } = require("socket.io");
 const server = http.createServer(app);
 const io = new Server(server, {
   cors:{
-    origin: "http://localhost:3000/",
+    origin: "http://web-happy.herokuapp.com",
     methods:["GET", "POST"],
-    credentials: true,
   }
 });
 
@@ -64,7 +63,7 @@ io.on('connection', (socket) =>{
     socket.join(data);
   })
 
-  socket.on("send_message", (data)=>{
+  socket.on("send_message", (data)=>{S
     socket.to(data.channel).emit("receive_message", data);
   })
 })
