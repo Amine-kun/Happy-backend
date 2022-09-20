@@ -15,7 +15,7 @@ const { Server } = require("socket.io");
 const server = http.createServer(app);
 const io = new Server(server, {
   cors:{
-    origin: "http://web-happy.herokuapp.com",
+    origin: "https://web-happy.herokuapp.com",
     methods:["GET", "POST"],
   }
 });
@@ -63,7 +63,7 @@ io.on('connection', (socket) =>{
     socket.join(data);
   })
 
-  socket.on("send_message", (data)=>{S
+  socket.on("send_message", (data)=>{
     socket.to(data.channel).emit("receive_message", data);
   })
 })
@@ -145,4 +145,4 @@ const uploadingController = require('./controllers/upload/upload');
 
 
  app.use(express.static('upload'));
- server.listen(process.env.PORT || 3001, ()=> console.log("listening..."));
+ server.listen(3001, ()=> console.log("listening..."));
